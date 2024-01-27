@@ -12,4 +12,11 @@ const pool = new Pool({
 //pool.query("CREATE TABLE users (username VARCHAR(100) PRIMARY KEY, pass VARCHAR(100)) ")
 //pool.query("INSERT INTO users (username, pass) VALUES ($1, $2)", ["admin", "admin"])
 
+/*async function test(){
+	const result = await pool.query("select * from users where username = 'admin' and pass = 'admin'")
+	console.log(result.rowCount > 0)
+}
+
+test()*/
+
 module.exports = pool
