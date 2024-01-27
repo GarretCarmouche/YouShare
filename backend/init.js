@@ -30,23 +30,8 @@ function generateLoginKey(user){
 	return uid
 }
 
-function loginPage(req, res){
-	return res.send("Login page")
-}
-
-service.get("/", (req, res) => {
-	return res.redirect("/login")
-})
-
-service.get("/login", (req, res) => {
-	return loginPage(req, res)
-})
-
-service.get("/home", (req, res) => {
-	return res.send("Home page")
-})
-
 service.get("/requestLogin", (req, res) => {
+	res.header("Access-Control-Allow-Origin", "*")
 	var user = req.query.USERNAME
 	var pass = req.query.PASS
 	validateCridentials(user, pass).then((result) => {

@@ -1,5 +1,7 @@
-import React from "react";
-import { useState } from "react";
+import React from "react"
+import { useState } from "react"
+import { SetLoginKey } from './App'
+import axios from 'axios'
 
 function Login(){
 	const [username, serUsername] = useState("");
@@ -8,9 +10,26 @@ function Login(){
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		// Implement authentication logic here
 		console.log(password)
 		console.log(username)
+
+		axios.get("http://localhost:2048/requestlogin", {
+			params: {
+				USERNAME: username,
+				PASS: password,
+			}
+		}).then(function (response){
+			console.log(response)
+			var success = response.data[0]
+			var loginKey = response.data[1]
+			console.log(success)
+			console.log(loginKey)
+			if(success){
+				SetLoginKey(loginKey)
+			}
+		}).catch(function(error){
+			console.log(error)
+		})
 	}
 
 	return (
