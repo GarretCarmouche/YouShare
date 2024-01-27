@@ -1,5 +1,6 @@
 import React from 'react'
 import Login from './Login'
+import Home from './Home'
 
 var loginKey
 function SetLoginKey(key){
@@ -8,7 +9,23 @@ function SetLoginKey(key){
 }
 
 function App() {
-  return Login()
+  var page
+  switch(window.location.pathname){
+    case "/":
+      page = <Login />
+      break
+    case "/login":
+      page = <Login />
+      break
+    case "/home":
+      page = <Home />
+      break
+  }
+  return (
+    <>
+      {page}
+    </>
+  )
 }
 
 export default App

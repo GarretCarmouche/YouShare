@@ -26,6 +26,7 @@ function Login(){
 			console.log(loginKey)
 			if(success){
 				SetLoginKey(loginKey)
+				window.open("/home")
 			}
 		}).catch(function(error){
 			console.log(error)
