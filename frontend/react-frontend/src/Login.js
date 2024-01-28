@@ -1,6 +1,6 @@
 import React from "react"
 import { useState } from "react"
-import { SetLoginKey } from './App'
+import { SetLoginKey, SetUsername } from './App'
 import axios from 'axios'
 
 function Login(){
@@ -25,6 +25,7 @@ function Login(){
 			console.log(success)
 			console.log(loginKey)
 			if(success){
+				SetUsername(username)
 				SetLoginKey(loginKey)
 				window.open("/home")
 			}

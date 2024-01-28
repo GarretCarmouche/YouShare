@@ -1,5 +1,6 @@
 const express = require("express")
 const pool = require("../db/db")
+const fs = require("fs")
 
 const service = express()
 
@@ -37,6 +38,22 @@ service.get("/requestLogin", (req, res) => {
 	validateCridentials(user, pass).then((result) => {
 		res.send(result)
 	})	
+})
+
+service.get("/uploadFile", (req, res) => {
+	res.header("Access-Control-Allow-Origin", "*")
+	var user = req.query.USERNAME
+	var loginKey = req.query.LOGINKEY
+	
+	if(validateLoginKey(user, loginKey) == false){
+		res.send(false)
+		return
+	}
+
+	console.log(req.data)
+	console.log(req.params)
+	console.log(req.query)
+	res.send(true)
 })
 
 service.listen(port, () => console.log("Listening on port " + port))
