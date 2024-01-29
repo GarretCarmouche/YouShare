@@ -2,6 +2,7 @@ import React from 'react'
 import Login from './Login'
 import Home from './Home'
 import FileUpload from './FileUpload'
+import FileList from './FileList'
 
 function GetUsername(){
   return sessionStorage.getItem("username")
@@ -21,6 +22,11 @@ function GetLoginKey(){
   return sessionStorage.getItem("loginKey")
 }
 
+function GetFiles(){
+  var files = ["test1.txt", "test2.txt", "test3.txt"]
+  return files
+}
+
 function App() {
   var page
   switch(window.location.pathname){
@@ -35,6 +41,9 @@ function App() {
       break
     case "/upload":
       page = <FileUpload />
+      break
+    case "/files":
+      page = <FileList />
       break
     default:
       page = <Login />
@@ -52,3 +61,4 @@ export {SetLoginKey}
 export {GetLoginKey}
 export {SetUsername}
 export {GetUsername}
+export {GetFiles}
