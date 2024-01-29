@@ -1,7 +1,7 @@
 import React from "react"
 
 function NavigateUpload(){
-	window.open("/upload")
+	window.location.href = "/upload"
 }
 
 function Home(){

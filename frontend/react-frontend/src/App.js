@@ -3,25 +3,22 @@ import Login from './Login'
 import Home from './Home'
 import FileUpload from './FileUpload'
 
-var loginKey
-var username
-
 function GetUsername(){
-  return username
+  return sessionStorage.getItem("username")
 }
 
 function SetUsername(user){
-  username = user
-  console.log("SET USERNAME",username)
+  sessionStorage.setItem("username", user)
+  console.log("SET USERNAME",user)
 }
 
 function SetLoginKey(key){
-  loginKey = key
+  sessionStorage.setItem("loginKey", key)
   console.log("SET LOGIN KEY",key)
 }
 
 function GetLoginKey(){
-  return loginKey
+  return sessionStorage.getItem("loginKey")
 }
 
 function App() {

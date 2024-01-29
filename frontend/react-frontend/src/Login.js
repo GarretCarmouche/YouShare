@@ -1,6 +1,6 @@
 import React from "react"
 import { useState } from "react"
-import { SetLoginKey, SetUsername } from './App'
+import { GetUsername, SetLoginKey, SetUsername } from './App'
 import axios from 'axios'
 
 function Login(){
@@ -12,7 +12,6 @@ function Login(){
 
 		console.log(password)
 		console.log(username)
-
 		axios.get("http://localhost:2048/requestlogin", {
 			params: {
 				USERNAME: username,
@@ -27,7 +26,9 @@ function Login(){
 			if(success){
 				SetUsername(username)
 				SetLoginKey(loginKey)
-				window.open("/home")
+				window.location.href = "/home"
+
+				console.log("Get usernanme", GetUsername())
 			}
 		}).catch(function(error){
 			console.log(error)

@@ -24,17 +24,18 @@ function FileUpload(){
 	
 		const fd = new FormData()
 		fd.append("file", file)
+		fd.append("username", username)
+		fd.append("loginKey", loginKey)
 	
 		console.log("UPLOADING FILE")
-		axios.get("http://localhost:2048/uploadFile", {
-			fd,
-			params: {
-				USERNAME: username,
-				LOGINKEY: loginKey,
-			}
-		},{
-			onUploadProgress: (progressEvent) => {console.log(progressEvent.progress*100+"%")},
-		}).then(function(response){
+		console.log(fd)
+		console.log(file)
+		console.log(file.name)
+		console.log(file.data)
+		console.log(username)
+		console.log(loginKey)
+
+		axios.post("http://localhost:2048/uploadFile", fd).then(function(response){
 			console.log(response)
 		}).catch(function(error){
 			console.log(error)
