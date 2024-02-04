@@ -1,9 +1,10 @@
 import React from "react"
-import {GetFiles} from "./App"
 import FileItem from "./FileItem"
 
-function FileList(){
-	var files = GetFiles()
+function FileList(files){
+	console.log("File list page got files")
+	console.log(files)
+	console.log(Date.now())
 
 	return (
 		<div>

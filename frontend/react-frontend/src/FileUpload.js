@@ -1,7 +1,7 @@
 import React from "react"
 import { useState } from "react"
 import axios from "axios"
-import { GetLoginKey, GetUsername } from "./App"
+import { GetLoginKey, GetUsername, UpdateFiles } from "./App"
 
 function FileUpload(){
 	const [file, setFile] = useState(null)
@@ -37,6 +37,7 @@ function FileUpload(){
 
 		axios.post("http://localhost:2048/uploadFile", fd).then(function(response){
 			console.log(response)
+			UpdateFiles()
 		}).catch(function(error){
 			console.log(error)
 		})

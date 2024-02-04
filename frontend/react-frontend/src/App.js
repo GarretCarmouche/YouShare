@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Login from './Login'
 import Home from './Home'
 import FileUpload from './FileUpload'
 import FileList from './FileList'
+import axios from 'axios'
 
 function GetUsername(){
   return sessionStorage.getItem("username")
@@ -22,31 +23,50 @@ function GetLoginKey(){
   return sessionStorage.getItem("loginKey")
 }
 
+async function UpdateFiles(){
+  if (GetUsername() == null || GetLoginKey() == null){
+    return
+  }
+
+  axios.get("http://localhost:2048/getFileList", {
+    params: {
+      USERNAME: GetUsername(),
+      LOGINKEY: GetLoginKey()
+    }
+  }).then((response) => {
+    console.log("Axios get files response")
+    console.log(response)
+    sessionStorage.setItem("filesList", JSON.stringify(response.data))
+  })
+}
+
 function GetFiles(){
-  var files = ["test1.txt", "test2.txt", "test3.txt"]
-  return files
+  var filesList = JSON.parse(sessionStorage.getItem("filesList"))
+  console.log("Get files")
+  console.log(filesList)
+  return filesList
 }
 
 function App() {
   var page
   switch(window.location.pathname){
     case "/":
-      page = <Login />
+      page = Login()
       break
     case "/login":
-      page = <Login />
+      page = Login()
       break
     case "/home":
-      page = <Home />
+      page = Home()
       break
     case "/upload":
-      page = <FileUpload />
+      page = FileUpload()
       break
     case "/files":
-      page = <FileList />
+      page = FileList(GetFiles())
       break
     default:
-      page = <Login />
+      page = Login()
       break
   }
   return (
@@ -62,3 +82,4 @@ export {GetLoginKey}
 export {SetUsername}
 export {GetUsername}
 export {GetFiles}
+export {UpdateFiles}

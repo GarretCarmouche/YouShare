@@ -1,6 +1,6 @@
 import React from "react"
 import { useState } from "react"
-import { GetUsername, SetLoginKey, SetUsername } from './App'
+import { GetUsername, SetLoginKey, SetUsername, UpdateFiles } from './App'
 import axios from 'axios'
 
 function Login(){
@@ -29,6 +29,7 @@ function Login(){
 				window.location.href = "/home"
 
 				console.log("Get usernanme", GetUsername())
+				UpdateFiles()
 			}
 		}).catch(function(error){
 			console.log(error)
