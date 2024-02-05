@@ -5,6 +5,7 @@ import FileUpload from './FileUpload'
 import FileList from './FileList'
 import axios from 'axios'
 import DownloadSharedItem from './DownloadSharedItem'
+import UploadFileFromLink from './UploadFileFromLink'
 
 function GetUsername(){
   return sessionStorage.getItem("username")
@@ -68,6 +69,9 @@ function App() {
       break
     case "/downloadFileFromLink":
       page = DownloadSharedItem()
+      break
+    case "/uploadFileFromLink":
+      page = UploadFileFromLink()
       break
     default:
       page = Login()
