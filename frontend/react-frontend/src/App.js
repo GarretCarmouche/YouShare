@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Login from './Login'
 import Home from './Home'
 import FileUpload from './FileUpload'
 import FileList from './FileList'
 import axios from 'axios'
+import DownloadSharedItem from './DownloadSharedItem'
 
 function GetUsername(){
   return sessionStorage.getItem("username")
@@ -64,6 +65,9 @@ function App() {
       break
     case "/files":
       page = FileList(GetFiles())
+      break
+    case "/downloadFileFromLink":
+      page = DownloadSharedItem()
       break
     default:
       page = Login()
