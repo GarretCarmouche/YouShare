@@ -6,6 +6,7 @@ import { UpdateFiles } from "./App"
 function UploadFileFromLink(){
 	const [file, setFile] = useState(null)
 	const [uploadDebounce, setUploadDebounce] = useState(false)
+	const [uploadProgress, setUploadProgress] = useState("")
 
 	console.log(window.location)
 	var search = window.location.search
@@ -36,7 +37,19 @@ function UploadFileFromLink(){
 		console.log(file.name)
 		console.log(file.data)
 
-		axios.post("http://localhost:2048/uploadFileWithSharedKey", fd).then(function(response){
+		const config = {
+			onUploadProgress: function(progressEvent){
+				if(progressEvent.loaded === progressEvent.total){
+					setUploadProgress("Upload Complete")
+				}else{
+					var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+					console.log(percentCompleted)
+					setUploadProgress("Progress: " + percentCompleted + "%")
+				}
+			}
+		}
+
+		axios.post("http://localhost:2048/uploadFileWithSharedKey", fd, config).then(function(response){
 			console.log(response)
 			UpdateFiles()
 		}).catch(function(error){
@@ -48,10 +61,14 @@ function UploadFileFromLink(){
 		<div>
 			<h1>
 				UPLOAD PAGE
-				<input onChange={ (e) => {setFile(e.target.files[0])} } type="file" />
-
-				<button onClick = {submit}>Upload</button>
 			</h1>
+			<div>
+				<input onChange={ (e) => {setFile(e.target.files[0])} } type="file" />
+				<button onClick = {submit}>Upload</button>
+			</div>
+			<div>
+				{uploadProgress}
+			</div>
 		</div>
 	)
 }

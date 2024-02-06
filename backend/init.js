@@ -26,7 +26,8 @@ const loginKeys = []
 const downloadKeys = []
 const uploadKeys = []
 
-async function validateLoginKey(user, loginKey){
+function validateLoginKey(user, loginKey){
+	console.log("Validate login key",user, loginKey, loginKeys, loginKeys[user])
 	if (user == null || loginKey == null){
 		return false
 	}
@@ -43,7 +44,7 @@ async function validateCridentials(user, pass){
 	var isValid = data.rowCount > 0
 	var key
 	if (isValid){
-		key = generateLoginKey()
+		key = generateLoginKey(user)
 	}
 	return [data.rowCount > 0, key]
 }
@@ -86,11 +87,13 @@ function validateDownloadKey(file, key){
 
 function generateLoginKey(user){
 	if (loginKeys[user]){
+		console.log("Get cached login key",user,loginKeys[user])
 		return loginKeys[user]
 	}
 
 	const uid = crypto.randomUUID()
 	loginKeys[user] = uid
+	console.log("Generate login key",user,loginKeys[user])
 	return uid
 }
 
@@ -107,8 +110,7 @@ service.get("/getFileList", (req, res) => {
 	res.header("Access-Control-Allow-Origin", "*")
 	var user = req.query.USERNAME
 	var loginKey = req.query.LOGINKEY
-	console.log(user)
-	console.log(loginKey)
+	console.log("Get file list",user,loginKey)
 
 	if(validateLoginKey(user, loginKey) == false){
 		res.send(false)
@@ -116,7 +118,7 @@ service.get("/getFileList", (req, res) => {
 	}
 
 	fs.readdirSync("/usr/src/app/uploads").forEach(file => {
-		console.log(file)
+		console.log("File list item",file)
 	})
 	res.send(fs.readdirSync("/usr/src/app/uploads"))
 })
@@ -124,8 +126,7 @@ service.get("/getFileList", (req, res) => {
 service.post("/uploadFile", upload.single("file"), (req, res) => {
 	var user = req.body.username
 	var loginKey = req.body.loginKey
-	console.log(user)
-	console.log(loginKey)
+	console.log("Upload file",user,loginKey)
 
 	if(validateLoginKey(user, loginKey) == false){
 		res.send(false)
@@ -143,7 +144,7 @@ service.post("/uploadFile", upload.single("file"), (req, res) => {
 
 service.post("/uploadFileWithSharedKey", upload.single("file"), (req, res) => {
 	var sharedKey = req.body.key
-	console.log(sharedKey)
+	console.log("Upload with shared key",sharedKey)
 
 	if(validateUploadKey(sharedKey) == false){
 		res.send(false)

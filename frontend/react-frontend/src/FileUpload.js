@@ -6,6 +6,7 @@ import { GetLoginKey, GetUsername, UpdateFiles } from "./App"
 function FileUpload(){
 	const [file, setFile] = useState(null)
 	const [uploadDebounce, setUploadDebounce] = useState(false)
+	const [uploadProgress, setUploadProgress] = useState("")
 
 	function submit(){
 		if (!file){
@@ -35,7 +36,19 @@ function FileUpload(){
 		console.log(username)
 		console.log(loginKey)
 
-		axios.post("http://localhost:2048/uploadFile", fd).then(function(response){
+		const config = {
+			onUploadProgress: function(progressEvent){
+				if(progressEvent.loaded === progressEvent.total){
+					setUploadProgress("Upload Complete")
+				}else{
+					var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+					console.log(percentCompleted)
+					setUploadProgress("Progress: " + percentCompleted + "%")
+				}
+			}
+		}
+
+		axios.post("http://localhost:2048/uploadFile", fd, config).then(function(response){
 			console.log(response)
 			UpdateFiles()
 		}).catch(function(error){
@@ -47,10 +60,15 @@ function FileUpload(){
 		<div>
 			<h1>
 				UPLOAD PAGE
-				<input onChange={ (e) => {setFile(e.target.files[0])} } type="file" />
-
-				<button onClick = {submit}>Upload</button>
 			</h1>
+
+			<div>
+				<input onChange={ (e) => {setFile(e.target.files[0])} } type="file" />
+				<button onClick = {submit}>Upload</button>
+			</div>
+			<div>
+				{uploadProgress}
+			</div>
 		</div>
 	)
 }

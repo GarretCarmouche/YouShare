@@ -50,6 +50,7 @@ function GetFiles(){
 }
 
 function App() {
+  UpdateFiles()
   var page
   switch(window.location.pathname){
     case "/":
