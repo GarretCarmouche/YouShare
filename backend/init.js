@@ -22,9 +22,39 @@ service.use(cors())
 service.use(express.json())
 
 const port = process.env.PORT || 2048
-const loginKeys = []
-const downloadKeys = []
-const uploadKeys = []
+const defaultUser = "admin"
+const defaultPass = "admin"
+
+var loginKeys = []
+var downloadKeys = []
+var uploadKeys = []
+
+function clearLoginKeys(){
+	loginKeys = []
+}
+
+async function checkDefaultUser(){
+	await pool.query("CREATE TABLE IF NOT EXISTS users (username TEXT, pass TEXT)")
+	
+	pool.query("SELECT * FROM users WHERE username = '"+defaultUser+"'").then((data) => {
+		if (data.rowCount == 0){
+			console.log("Create default user")
+			pool.query("INSERT INTO users (username, pass) VALUES ('"+defaultUser+"', '"+defaultPass+"')")
+		}
+	})
+}
+
+async function updateLogin(oldUsername, newUsername, newPassword){
+	await pool.query("DELETE FROM users WHERE username = '"+oldUsername+"'")
+	await pool.query("INSERT INTO users (username, pass) VALUES ('"+newUsername+"', '"+newPassword+"')")
+
+	console.log("Updated login info")
+	pool.query("SELECT * FROM users").then((data) => {
+		console.log(data.rows)
+	})
+
+	clearLoginKeys()
+}
 
 function validateLoginKey(user, loginKey){
 	console.log("Validate login key",user, loginKey, loginKeys, loginKeys[user])
@@ -96,6 +126,30 @@ function generateLoginKey(user){
 	console.log("Generate login key",user,loginKeys[user])
 	return uid
 }
+
+service.get("/updateLoginInfo", (req, res) => {
+	res.header("Access-Control-Allow-Origin", "*")
+	var oldUser = req.query.OLDUSERNAME
+	var oldPass = req.query.OLDPASS
+	var newUser = req.query.NEWUSERNAME
+	var newPass = req.query.NEWPASS
+
+	validateCridentials(oldUser, oldPass).then((result) => {
+		if (result[0]){
+			updateLogin(oldUser, newUser, newPass).then(() => {
+				res.send(true)
+			}).catch((error) => {
+				console.log(error)
+				res.send(false)
+			})
+		}else{
+			res.send(false)
+		}
+	}).catch((error) => {
+		console.log(error)
+		res.send(false)
+	})
+})
 
 service.get("/requestLogin", (req, res) => {
 	res.header("Access-Control-Allow-Origin", "*")
@@ -215,4 +269,5 @@ service.get("/createUploadLink", (req, res) => {
 	res.send(link)
 })
 
+checkDefaultUser()
 service.listen(port, () => console.log("Listening on port " + port))

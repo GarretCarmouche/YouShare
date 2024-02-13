@@ -26,10 +26,14 @@ function Login(){
 			if(success){
 				SetUsername(username)
 				SetLoginKey(loginKey)
-				window.location.href = "/home"
-
 				console.log("Get usernanme", GetUsername())
 				UpdateFiles()
+
+				if(username === "admin"){
+					window.location.href = "/updateLogin"
+				}else{
+					window.location.href = "/home"
+				}
 			}
 		}).catch(function(error){
 			console.log(error)

@@ -6,6 +6,7 @@ import FileList from './FileList'
 import axios from 'axios'
 import DownloadSharedItem from './DownloadSharedItem'
 import UploadFileFromLink from './UploadFileFromLink'
+import UpdateLogin from './UpdateLogin'
 
 function GetUsername(){
   return sessionStorage.getItem("username")
@@ -50,7 +51,6 @@ function GetFiles(){
 }
 
 function App() {
-  UpdateFiles()
   var page
   switch(window.location.pathname){
     case "/":
@@ -58,6 +58,9 @@ function App() {
       break
     case "/login":
       page = Login()
+      break
+    case "/updateLogin":
+      page = UpdateLogin()
       break
     case "/home":
       page = Home()
@@ -84,6 +87,8 @@ function App() {
     </>
   )
 }
+
+UpdateFiles()
 
 export default App
 export {SetLoginKey}
