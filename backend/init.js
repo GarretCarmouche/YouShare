@@ -26,6 +26,15 @@ const loginKeys = []
 const downloadKeys = []
 const uploadKeys = []
 
+async function updateLogin(oldUsername, newUsername, newPassword){
+	await pool.query("DELETE FROM users WHERE username = '"+oldUsername+"'")
+	await pool.query("INSERT INTO users (username, pass) VALUES ('"+newUsername+"', '"+newPassword+"')")
+
+	pool.query("SELECT * FROM users").then((data) => {
+		console.log(data.rows)
+	})
+}
+
 function validateLoginKey(user, loginKey){
 	console.log("Validate login key",user, loginKey, loginKeys, loginKeys[user])
 	if (user == null || loginKey == null){
