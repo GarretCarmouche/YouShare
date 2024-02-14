@@ -3,6 +3,7 @@ const pool = require("../db/db")
 const fs = require("fs")
 const multer = require("multer")
 const cors = require("cors")
+const bcrypt = require("bcrypt")
 
 if (!fs.existsSync("/usr/src/app/uploads")){
 	fs.mkdirSync("/usr/src/app/uploads")
@@ -34,21 +35,24 @@ function clearLoginKeys(){
 }
 
 async function checkDefaultUser(){
+	const hashPass = bcrypt.hashSync(defaultPass, 10)
 	await pool.query("CREATE TABLE IF NOT EXISTS users (username TEXT, pass TEXT)")
 	
 	pool.query("SELECT * FROM users WHERE username = '"+defaultUser+"'").then((data) => {
 		if (data.rowCount == 0){
 			console.log("Create default user")
-			pool.query("INSERT INTO users (username, pass) VALUES ('"+defaultUser+"', '"+defaultPass+"')")
+			pool.query("INSERT INTO users (username, pass) VALUES ('"+defaultUser+"', '"+hashPass+"')")
 		}
 	})
 }
 
 async function updateLogin(oldUsername, newUsername, newPassword){
-	await pool.query("DELETE FROM users WHERE username = '"+oldUsername+"'")
-	await pool.query("INSERT INTO users (username, pass) VALUES ('"+newUsername+"', '"+newPassword+"')")
+	const hashPass = bcrypt.hashSync(newPassword, 10)
 
-	console.log("Updated login info")
+	await pool.query("DELETE FROM users WHERE username = '"+oldUsername+"'")
+	await pool.query("INSERT INTO users (username, pass) VALUES ('"+newUsername+"', '"+hashPass+"')")
+
+	console.log("Updated login info", hashPass)
 	pool.query("SELECT * FROM users").then((data) => {
 		console.log(data.rows)
 	})
@@ -70,13 +74,19 @@ function validateLoginKey(user, loginKey){
 }
 
 async function validateCridentials(user, pass){
-	var data = await pool.query("SELECT * FROM users WHERE username = '"+user+"' AND pass = '"+pass+"'")
-	var isValid = data.rowCount > 0
+	var hashPass = await pool.query("SELECT pass FROM users WHERE username = '"+user+"'")
+
+	if (hashPass.rowCount == 0){
+		return [false, null]
+	}
+
+	console.log("HashPass", hashPass.rows[0].pass)
+	var isValid = bcrypt.compareSync(pass, hashPass.rows[0].pass)
 	var key
 	if (isValid){
 		key = generateLoginKey(user)
 	}
-	return [data.rowCount > 0, key]
+	return [isValid, key]
 }
 
 function generateUploadKey(){
