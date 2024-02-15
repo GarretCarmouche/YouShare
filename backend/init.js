@@ -4,6 +4,7 @@ const fs = require("fs")
 const multer = require("multer")
 const cors = require("cors")
 const bcrypt = require("bcrypt")
+const rateLimit = require("express-rate-limit")
 
 if (!fs.existsSync("/usr/src/app/uploads")){
 	fs.mkdirSync("/usr/src/app/uploads")
@@ -17,10 +18,17 @@ const storage = multer.diskStorage({
 		cb(null, file.originalname)
 	}
 })
+
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	limit: 100, // limit each IP to 100 requests per windowMs
+})
+
 const upload = multer({storage})
 const service = express()
 service.use(cors())
 service.use(express.json())
+service.use(limiter)
 
 const port = process.env.PORT || 2048
 const defaultUser = "admin"
