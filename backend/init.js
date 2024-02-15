@@ -46,7 +46,7 @@ async function checkDefaultUser(){
 	const hashPass = bcrypt.hashSync(defaultPass, 10)
 	await pool.query("CREATE TABLE IF NOT EXISTS users (username TEXT, pass TEXT)")
 	
-	pool.query("SELECT * FROM users WHERE username = '"+defaultUser+"'").then((data) => {
+	pool.query("SELECT * FROM users").then((data) => {
 		if (data.rowCount == 0){
 			console.log("Create default user")
 			pool.query("INSERT INTO users (username, pass) VALUES ('"+defaultUser+"', '"+hashPass+"')")
@@ -57,8 +57,11 @@ async function checkDefaultUser(){
 async function updateLogin(oldUsername, newUsername, newPassword){
 	const hashPass = bcrypt.hashSync(newPassword, 10)
 
-	await pool.query("DELETE FROM users WHERE username = '"+oldUsername+"'")
-	await pool.query("INSERT INTO users (username, pass) VALUES ('"+newUsername+"', '"+hashPass+"')")
+	await pool.query("DELETE FROM users WHERE username = $1",
+	[oldUsername])
+
+	await pool.query("INSERT INTO users (username, pass) VALUES ($1, $2)",
+	[newUsername, hashPass])
 
 	console.log("Updated login info", hashPass)
 	pool.query("SELECT * FROM users").then((data) => {
@@ -82,7 +85,8 @@ function validateLoginKey(user, loginKey){
 }
 
 async function validateCridentials(user, pass){
-	var hashPass = await pool.query("SELECT pass FROM users WHERE username = '"+user+"'")
+	var hashPass = await pool.query("SELECT pass FROM users WHERE username = $1",
+	[user])
 
 	if (hashPass.rowCount == 0){
 		return [false, null]
