@@ -4,7 +4,6 @@ import FileItem from "./FileItem"
 function FileList(files){
 	console.log("File list page got files")
 	console.log(files)
-	console.log(Date.now())
 
 	return (
 		<div>
