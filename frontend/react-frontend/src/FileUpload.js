@@ -2,6 +2,7 @@ import React from "react"
 import { useState } from "react"
 import axios from "axios"
 import { GetLoginKey, GetUsername, UpdateFiles } from "./App"
+import NavBar from "./NavBar"
 
 function FileUpload(){
 	const [file, setFile] = useState(null)
@@ -58,10 +59,7 @@ function FileUpload(){
 
 	return (
 		<div>
-			<h1>
-				UPLOAD PAGE
-			</h1>
-
+			<NavBar></NavBar>
 			<div>
 				<input onChange={ (e) => {setFile(e.target.files[0])} } type="file" />
 				<button onClick = {submit}>Upload</button>
