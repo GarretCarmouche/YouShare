@@ -1,5 +1,6 @@
 import React from "react"
 import FileItem from "./FileItem"
+import NavBar from "./NavBar"
 
 function FileList(files){
 	console.log("File list page got files")
@@ -7,9 +8,7 @@ function FileList(files){
 
 	return (
 		<div>
-			<h1>
-				FILES
-			</h1>
+			<NavBar></NavBar>
 			<div>
 				{files.map(function(item){
 					return (FileItem(item))
