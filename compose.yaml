@@ -21,7 +21,7 @@ services:
     environment:
       NODE_ENV: production
       POSTGRES_HOST: db
-      POSTGRES_USER: postgres
+      POSTGRES_USER: /run/secrets/db-user
       POSTGRES_PASSWORD_FILE: /run/secrets/db-password
       POSTGRES_DB: authentication
     ports:
@@ -31,6 +31,7 @@ services:
         condition: service_healthy
     secrets:
       - db-password
+      - db-user
   db:
     image: postgres
     restart: always
@@ -69,6 +70,8 @@ volumes:
 secrets:
   db-password:
     file: db/password.txt
+  db-user:
+    file: db/user.txt
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
