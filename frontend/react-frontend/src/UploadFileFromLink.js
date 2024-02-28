@@ -1,7 +1,7 @@
 import React from "react"
 import { useState } from "react"
 import axios from "axios"
-import { UpdateFiles } from "./App"
+import { GetApiUrl, UpdateFiles } from "./App"
 
 function UploadFileFromLink(){
 	const [file, setFile] = useState(null)
@@ -49,7 +49,7 @@ function UploadFileFromLink(){
 			}
 		}
 
-		axios.post("http://localhost:2048/uploadFileWithSharedKey", fd, config).then(function(response){
+		axios.post(GetApiUrl()+"/uploadFileWithSharedKey", fd, config).then(function(response){
 			console.log(response)
 			UpdateFiles()
 		}).catch(function(error){

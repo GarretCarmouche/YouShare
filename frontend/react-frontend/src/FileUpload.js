@@ -1,7 +1,7 @@
 import React from "react"
 import { useState } from "react"
 import axios from "axios"
-import { GetLoginKey, GetUsername, UpdateFiles } from "./App"
+import { GetApiUrl, GetLoginKey, GetUsername, UpdateFiles } from "./App"
 import NavBar from "./NavBar"
 
 function FileUpload(){
@@ -49,7 +49,7 @@ function FileUpload(){
 			}
 		}
 
-		axios.post("http://localhost:2048/uploadFile", fd, config).then(function(response){
+		axios.post(GetApiUrl()+"/uploadFile", fd, config).then(function(response){
 			console.log(response)
 			UpdateFiles()
 		}).catch(function(error){

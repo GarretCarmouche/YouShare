@@ -8,6 +8,12 @@ import DownloadSharedItem from './DownloadSharedItem'
 import UploadFileFromLink from './UploadFileFromLink'
 import UpdateLogin from './UpdateLogin'
 
+const ApiUrl = "http://localhost:2048"
+
+function GetApiUrl(){
+  return ApiUrl
+}
+
 function GetUsername(){
   return sessionStorage.getItem("username")
 }
@@ -31,7 +37,7 @@ async function UpdateFiles(){
     return
   }
 
-  axios.get("http://localhost:2048/getFileList", {
+  axios.get(GetApiUrl()+"/getFileList", {
     params: {
       USERNAME: GetUsername(),
       LOGINKEY: GetLoginKey()
@@ -97,3 +103,4 @@ export {SetUsername}
 export {GetUsername}
 export {GetFiles}
 export {UpdateFiles}
+export {GetApiUrl}
