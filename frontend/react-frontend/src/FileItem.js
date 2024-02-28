@@ -2,7 +2,7 @@ import axios from "axios"
 import FileDownload from "js-file-download"
 import React, { useState } from "react"
 
-import { GetLoginKey, GetUsername } from "./App"
+import { GetApiUrl, GetLoginKey, GetUsername } from "./App"
 
 function FileItem(itemName){
 	const [itemShareLink, setShareLink] = useState("")
@@ -11,7 +11,7 @@ function FileItem(itemName){
 		event.preventDefault()
 		console.log("Downloading", itemName)
 
-		axios.get("http://localhost:2048/downloadFile", {
+		axios.get(GetApiUrl()+"/downloadFile", {
 			params: {
 				USERNAME: GetUsername(),
 				LOGINKEY: GetLoginKey(),
@@ -30,7 +30,7 @@ function FileItem(itemName){
 		event.preventDefault()
 		console.log("Sharing", itemName)
 
-		axios.get("http://localhost:2048/createDownloadLink", {
+		axios.get(GetApiUrl()+"/createDownloadLink", {
 			params: {
 				USERNAME: GetUsername(),
 				LOGINKEY: GetLoginKey(),

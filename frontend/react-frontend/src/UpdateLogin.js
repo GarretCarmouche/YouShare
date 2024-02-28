@@ -1,6 +1,7 @@
 import React from "react"
 import { useState } from "react"
 import axios from 'axios'
+import { GetApiUrl } from "./App";
 
 function UpdateLogin(){
 	const [oldUsername, setOldUsername] = useState("");
@@ -11,7 +12,7 @@ function UpdateLogin(){
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		axios.get("http://localhost:2048/updateLoginInfo", {
+		axios.get(GetApiUrl()+"/updateLoginInfo", {
 			params: {
 				OLDUSERNAME: oldUsername,
 				OLDPASS: oldPassword,

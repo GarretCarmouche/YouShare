@@ -1,13 +1,13 @@
 import React, { useState } from "react"
 import axios from "axios"
-import { GetLoginKey, GetUsername } from "./App"
+import { GetApiUrl, GetLoginKey, GetUsername } from "./App"
 import NavBar from "./NavBar"
 
 function Home(){
 	const [sharedUploadLink, setSharedLink] = useState("")
 
 	function GenerateUploadLink(){
-		axios.get("http://localhost:2048/createUploadLink", {
+		axios.get(GetApiUrl()+"/createUploadLink", {
 			params: {
 			  USERNAME: GetUsername(),
 			  LOGINKEY: GetLoginKey()

@@ -1,6 +1,6 @@
 import React from "react"
 import { useState } from "react"
-import { GetUsername, SetLoginKey, SetUsername, UpdateFiles } from './App'
+import { GetApiUrl, GetUsername, SetLoginKey, SetUsername, UpdateFiles } from './App'
 import axios from 'axios'
 
 function Login(){
@@ -12,7 +12,7 @@ function Login(){
 
 		console.log(password)
 		console.log(username)
-		axios.get("http://localhost:2048/requestlogin", {
+		axios.get(GetApiUrl()+"/requestlogin", {
 			params: {
 				USERNAME: username,
 				PASS: password,

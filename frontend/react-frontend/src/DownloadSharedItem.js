@@ -1,6 +1,7 @@
 import React from "react"
 import axios from "axios"
 import FileDownload from "js-file-download"
+import { GetApiUrl } from "./App"
 
 function DownloadSharedItem(){
 	console.log(window.location)
@@ -18,7 +19,7 @@ function DownloadSharedItem(){
 		event.preventDefault()
 		console.log("Downloading", fileName)
 
-		axios.get("http://localhost:2048/downloadFileFromSharedLink", {
+		axios.get(GetApiUrl()+"/downloadFileFromSharedLink", {
 			params: {
 				FILENAME: fileName,
 				KEY: downloadKey
