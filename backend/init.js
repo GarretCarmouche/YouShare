@@ -5,6 +5,7 @@ const multer = require("multer")
 const cors = require("cors")
 const bcrypt = require("bcrypt")
 const rateLimit = require("express-rate-limit")
+const urls = require("./urls.json")
 
 if (!fs.existsSync("/usr/src/app/uploads")){
 	fs.mkdirSync("/usr/src/app/uploads")
@@ -33,14 +34,18 @@ service.use(limiter)
 const port = process.env.PORT || 2048
 const defaultUser = "admin"
 const defaultPass = "admin"
-const FrontendUrl = "http://localhost:2048"
+const frontendUrl = urls.frontend
 
 var loginKeys = []
 var downloadKeys = []
 var uploadKeys = []
 
-function GetFrontendUrl(){
-	return FrontendUrl
+function GetFrontendUrlForDisplay(){
+	if(frontendUrl == null){
+		return "[YourDomainOrIp]"
+	}
+
+	return frontendUrl
 }
 
 function clearLoginKeys(){
@@ -278,7 +283,7 @@ service.get("/createDownloadLink", (req, res) => {
 	}
 
 	var key = generateDownloadKey(file)
-	var link = GetFrontendUrl()+"/downloadFileFromLink?file="+file+"&key="+key
+	var link = GetFrontendUrlForDisplay()+"/downloadFileFromLink?file="+file+"&key="+key
 	res.send(link)
 })
 
@@ -292,7 +297,7 @@ service.get("/createUploadLink", (req, res) => {
 	}
 
 	var key = generateUploadKey()
-	var link = GetFrontendUrl()+"/uploadFileFromLink?key="+key
+	var link = GetFrontendUrlForDisplay()+"/uploadFileFromLink?key="+key
 	res.send(link)
 })
 
