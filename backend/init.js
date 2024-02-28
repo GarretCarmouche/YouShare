@@ -33,14 +33,14 @@ service.use(limiter)
 const port = process.env.PORT || 2048
 const defaultUser = "admin"
 const defaultPass = "admin"
-const ApiUrl = "http://localhost:2048"
+const FrontendUrl = "http://localhost:2048"
 
 var loginKeys = []
 var downloadKeys = []
 var uploadKeys = []
 
-function GetApiUrl(){
-	return ApiUrl
+function GetFrontendUrl(){
+	return FrontendUrl
 }
 
 function clearLoginKeys(){
@@ -278,7 +278,7 @@ service.get("/createDownloadLink", (req, res) => {
 	}
 
 	var key = generateDownloadKey(file)
-	var link = GetApiUrl()+"/downloadFileFromLink?file="+file+"&key="+key
+	var link = GetFrontendUrl()+"/downloadFileFromLink?file="+file+"&key="+key
 	res.send(link)
 })
 
@@ -292,7 +292,7 @@ service.get("/createUploadLink", (req, res) => {
 	}
 
 	var key = generateUploadKey()
-	var link = GetApiUrl()+"/uploadFileFromLink?key="+key
+	var link = GetFrontendUrl()+"/uploadFileFromLink?key="+key
 	res.send(link)
 })
 

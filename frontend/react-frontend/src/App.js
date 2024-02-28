@@ -8,7 +8,7 @@ import DownloadSharedItem from './DownloadSharedItem'
 import UploadFileFromLink from './UploadFileFromLink'
 import UpdateLogin from './UpdateLogin'
 
-const ApiUrl = "http://localhost:2048"
+const ApiUrl = "/backend"
 
 function GetApiUrl(){
   return ApiUrl
