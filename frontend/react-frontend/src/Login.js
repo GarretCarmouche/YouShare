@@ -1,6 +1,6 @@
 import React from "react"
 import { useState } from "react"
-import { GetApiUrl, GetUsername, SetLoginKey, SetUsername, UpdateFiles } from './App'
+import { GetApiUrl, GetLoginKey, GetUsername, SetLoginKey, SetUsername, UpdateFiles } from './App'
 import axios from 'axios'
 
 function Login(){
@@ -40,6 +40,14 @@ function Login(){
 		})
 	}
 
+	if(GetUsername() != null && GetLoginKey() != null){
+		if(GetUsername() === "admin"){
+			window.location.href = "/updateLogin"
+		}else{
+			window.location.href = "/home"
+		}
+	}
+	
 	return (
 		<form onSubmit={handleSubmit}>
 		<input

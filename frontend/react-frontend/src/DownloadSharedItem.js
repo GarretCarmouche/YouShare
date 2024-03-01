@@ -15,6 +15,7 @@ function DownloadSharedItem(){
 
 	console.log(fileName, "with key", downloadKey)
 
+
 	const downloadItem = (event) => {
 		event.preventDefault()
 		console.log("Downloading", fileName)
@@ -32,6 +33,18 @@ function DownloadSharedItem(){
 			FileDownload(response.data, fileName)
 		})
 	}
+
+	//Validate the download key, redirect
+	axios.get(GetApiUrl()+"/validateDownloadKey", {
+		params: {
+			FILENAME: fileName,
+			KEY: downloadKey
+		}
+	}).then((response) => {
+		if(response.data === false){
+			window.location = "/invalidLink"
+		}
+	})
 
 	return (
 		<div>

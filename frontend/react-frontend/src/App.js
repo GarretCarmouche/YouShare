@@ -7,6 +7,7 @@ import axios from 'axios'
 import DownloadSharedItem from './DownloadSharedItem'
 import UploadFileFromLink from './UploadFileFromLink'
 import UpdateLogin from './UpdateLogin'
+import InvalidLink from './InvalidLink'
 
 const ApiUrl = "/backend"
 
@@ -82,6 +83,9 @@ function App() {
       break
     case "/uploadFileFromLink":
       page = UploadFileFromLink()
+      break
+    case "/invalidLink":
+      page = InvalidLink()
       break
     default:
       page = Login()
