@@ -266,6 +266,11 @@ service.get("/validateDownloadKey", (req, res) => {
 	res.send(validateDownloadKey(file, key)) 
 })
 
+service.get("/validateUploadKey", (req, res) => {
+	var key = req.query.KEY
+	res.send(validateUploadKey(key))
+})
+
 service.get("/downloadFileFromSharedLink", (req, res) => {
 	var file = req.query.FILENAME
 	var key = req.query.KEY

@@ -12,7 +12,7 @@ function UploadFileFromLink(){
 	var search = window.location.search
 
 	var key = search.match("key=.*")[0]
-	key = key.substring(4, key.length - 1)
+	key = key.substring(4, key.length)
 
 	function submit(){
 		if (!file){
@@ -56,6 +56,17 @@ function UploadFileFromLink(){
 			console.log(error)
 		})
 	}
+
+	//Validate upload key
+	axios.get(GetApiUrl()+"/validateUploadKey", {
+		params: {
+			KEY: key
+		}
+	}).then((response) => {
+		if (response.data === false){
+			window.location = "/invalidLink"
+		}
+	})
 
 	return (
 		<div>
