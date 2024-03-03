@@ -35,6 +35,7 @@ const port = process.env.PORT || 2048
 const defaultUser = "admin"
 const defaultPass = "admin"
 const frontendUrl = urls.frontend
+const fileUploadAppendix = crypto.randomUUID()
 
 var loginKeys = []
 var downloadKeys = []
@@ -209,26 +210,35 @@ service.get("/getFileList", (req, res) => {
 	res.send(fs.readdirSync("/usr/src/app/uploads"))
 })
 
-service.post("/uploadFile", upload.single("file"), (req, res) => {
-	var user = req.body.username
-	var loginKey = req.body.loginKey
-	console.log("Upload file",user,loginKey)
-
-	if(validateLoginKey(user, loginKey) == false){
+service.get("/requestFileUpload", (req, res) => {
+	var authType = req.query.AUTH
+	if(authType == "Login"){
+		var user = req.query.USERNAME
+		var loginKey = req.query.LOGINKEY
+	
+		if(validateLoginKey(user, loginKey) != true){
+			res.send(false)
+			return
+		}
+	}else if (authType == "SharedKey"){
+		var key = req.query.KEY
+		if(validateUploadKey(key) == false){
+			res.send(false)
+			return
+		}
+	}else{
 		res.send(false)
 		return
 	}
 
-	console.log(req.body)
-	console.log(req.file)
+	res.send(fileUploadAppendix)
+})
 
-	fs.readdirSync("/usr/src/app/uploads").forEach(file => {
-		console.log(file)
-	})
+service.post("/uploadFile"+fileUploadAppendix, upload.single("file"), (req, res) => {
 	res.send(true)
 })
 
-service.post("/uploadFileWithSharedKey", upload.single("file"), (req, res) => {
+service.post("/uploadFileWithSharedKey"+fileUploadAppendix, upload.single("file"), (req, res) => {
 	var sharedKey = req.body.key
 	console.log("Upload with shared key",sharedKey)
 

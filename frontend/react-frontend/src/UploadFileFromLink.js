@@ -49,11 +49,23 @@ function UploadFileFromLink(){
 			}
 		}
 
-		axios.post(GetApiUrl()+"/uploadFileWithSharedKey", fd, config).then(function(response){
+		axios.get(GetApiUrl()+"/requestFileUpload", {
+			params: {
+				AUTH: "SharedKey",
+				KEY: key
+			}
+		}).then((response) => {
+			console.log("Axios request upload response")
 			console.log(response)
-			UpdateFiles()
-		}).catch(function(error){
-			console.log(error)
+			
+			if(response.data !== false){
+				axios.post(GetApiUrl()+"/uploadFile"+response.data, fd, config).then(function(response){
+					console.log(response)
+					UpdateFiles()
+				}).catch(function(error){
+					console.log(error)
+				})
+			}
 		})
 	}
 
