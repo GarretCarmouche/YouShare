@@ -68,6 +68,11 @@ function FileUpload(){
 		})
 	}
 
+	//Validate login info
+	if(GetUsername() === null || GetLoginKey() === null){
+		window.location.href = "/login"
+	}
+	
 	return (
 		<div>
 			<NavBar></NavBar>
