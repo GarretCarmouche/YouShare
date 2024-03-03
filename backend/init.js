@@ -238,24 +238,6 @@ service.post("/uploadFile"+fileUploadAppendix, upload.single("file"), (req, res)
 	res.send(true)
 })
 
-service.post("/uploadFileWithSharedKey"+fileUploadAppendix, upload.single("file"), (req, res) => {
-	var sharedKey = req.body.key
-	console.log("Upload with shared key",sharedKey)
-
-	if(validateUploadKey(sharedKey) == false){
-		res.send(false)
-		return
-	}
-
-	console.log(req.body)
-	console.log(req.file)
-
-	fs.readdirSync("/usr/src/app/uploads").forEach(file => {
-		console.log(file)
-	})
-	res.send(true)
-})
-
 service.get("/downloadFile", (req, res) => {
 	var user = req.query.USERNAME
 	var loginKey = req.query.LOGINKEY
