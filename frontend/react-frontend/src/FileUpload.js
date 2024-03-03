@@ -26,8 +26,6 @@ function FileUpload(){
 	
 		const fd = new FormData()
 		fd.append("file", file)
-		fd.append("username", username)
-		fd.append("loginKey", loginKey)
 	
 		console.log("UPLOADING FILE")
 		console.log(fd)
@@ -49,14 +47,32 @@ function FileUpload(){
 			}
 		}
 
-		axios.post(GetApiUrl()+"/uploadFile", fd, config).then(function(response){
+		axios.get(GetApiUrl()+"/requestFileUpload", {
+			params: {
+				AUTH: "Login",
+				USERNAME: GetUsername(),
+				LOGINKEY: GetLoginKey(),
+			}
+		}).then((response) => {
+			console.log("Axios request upload response")
 			console.log(response)
-			UpdateFiles()
-		}).catch(function(error){
-			console.log(error)
+			
+			if(response.data !== false){
+				axios.post(GetApiUrl()+"/uploadFile"+response.data, fd, config).then(function(response){
+					console.log(response)
+					UpdateFiles()
+				}).catch(function(error){
+					console.log(error)
+				})
+			}
 		})
 	}
 
+	//Validate login info
+	if(GetUsername() === null || GetLoginKey() === null){
+		window.location.href = "/login"
+	}
+	
 	return (
 		<div>
 			<NavBar></NavBar>

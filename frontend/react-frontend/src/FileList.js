@@ -6,6 +6,11 @@ function FileList(files){
 	console.log("File list page got files")
 	console.log(files)
 
+	//Validate login info
+	if(GetUsername() === null || GetLoginKey() === null){
+		window.location.href = "/login"
+	}
+	
 	return (
 		<div>
 			<NavBar></NavBar>
