@@ -26,8 +26,6 @@ function FileUpload(){
 	
 		const fd = new FormData()
 		fd.append("file", file)
-		fd.append("username", username)
-		fd.append("loginKey", loginKey)
 	
 		console.log("UPLOADING FILE")
 		console.log(fd)
