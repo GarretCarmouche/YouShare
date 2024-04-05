@@ -1,6 +1,7 @@
 import React from "react"
 import FileItem from "./FileItem"
 import NavBar from "./NavBar"
+import { GetLoginKey, GetUsername } from "./App"
 
 function FileList(files){
 	console.log("File list page got files")
