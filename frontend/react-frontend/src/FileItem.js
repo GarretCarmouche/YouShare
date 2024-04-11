@@ -2,10 +2,28 @@ import axios from "axios"
 import FileDownload from "js-file-download"
 import React, { useState } from "react"
 
-import { GetApiUrl, GetLoginKey, GetUsername } from "./App"
+import { GetApiUrl, GetLoginKey, GetUsername, UpdateFiles } from "./App"
 
 function FileItem(itemName){
 	const [itemShareLink, setShareLink] = useState("")
+
+	const deleteItem = (event) => {
+		event.preventDefault()
+		console.log("Deleting", itemName)
+
+		axios.get(GetApiUrl()+"/deleteFile", {
+			params: {
+				USERNAME: GetUsername(),
+				LOGINKEY: GetLoginKey(),
+				FILENAME: itemName,
+			},
+		}).then((response) => {
+			console.log("Axios delete response")
+			console.log(response)
+			UpdateFiles()
+			window.location.reload()
+		})
+	}
 
 	const downloadItem = (event) => {
 		event.preventDefault()
@@ -48,6 +66,7 @@ function FileItem(itemName){
 			{itemName}
 			<button onClick = {downloadItem}>Download</button>
 			<button onClick = {shareItem}>Share</button>
+			<button onClick = {deleteItem}>Delete</button>
 			{itemShareLink}
 		</div>
 	)

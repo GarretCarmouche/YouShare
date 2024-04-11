@@ -251,6 +251,27 @@ service.get("/downloadFile", (req, res) => {
 	res.download("/usr/src/app/uploads/"+file)
 })
 
+service.get("/deleteFile", (req, res) => {
+	var user = req.query.USERNAME
+	var loginKey = req.query.LOGINKEY
+	var file = req.query.FILENAME
+
+	if(validateLoginKey(user, loginKey) == false){
+		res.send(false)
+		return
+	}
+
+	if (!fs.existsSync("/usr/src/app/uploads/"+file)){
+		res.send(false)
+		return
+	}
+
+	fs.rm("/usr/src/app/uploads/"+file, () =>{
+		res.send(true)
+		return
+	})
+})
+
 service.get("/validateDownloadKey", (req, res) => {
 	var file = req.query.FILENAME
 	var key = req.query.KEY
