@@ -6,14 +6,15 @@ const cors = require("cors")
 const bcrypt = require("bcrypt")
 const rateLimit = require("express-rate-limit")
 const urls = require("./urls.json")
+const ROOT = "/usr/src/app/uploads"
 
-if (!fs.existsSync("/usr/src/app/uploads")){
-	fs.mkdirSync("/usr/src/app/uploads")
+if (!fs.existsSync(ROOT)){
+	fs.mkdirSync(ROOT)
 }
 
 const storage = multer.diskStorage({
 	destination: function(req, file, cb){
-		cb(null, "/usr/src/app/uploads")
+		cb(null, ROOT)
 	},
 	filename: function(req, file, cb){
 		cb(null, file.originalname)
@@ -204,10 +205,10 @@ service.get("/getFileList", (req, res) => {
 		return
 	}
 
-	fs.readdirSync("/usr/src/app/uploads").forEach(file => {
+	fs.readdirSync(ROOT).forEach(file => {
 		console.log("File list item",file)
 	})
-	res.send(fs.readdirSync("/usr/src/app/uploads"))
+	res.send(fs.readdirSync(ROOT))
 })
 
 service.get("/requestFileUpload", (req, res) => {
@@ -248,7 +249,7 @@ service.get("/downloadFile", (req, res) => {
 		return
 	}
 
-	res.download("/usr/src/app/uploads/"+file)
+	res.download(ROOT + "/" + file)
 })
 
 service.get("/deleteFile", (req, res) => {
@@ -261,12 +262,19 @@ service.get("/deleteFile", (req, res) => {
 		return
 	}
 
-	if (!fs.existsSync("/usr/src/app/uploads/"+file)){
+	filePath = fs.realpathSync(ROOT + "/" + file);
+	if (!filePath.startsWith(ROOT)) {
+		res.statusCode = 403;
+		res.end();
+		return;
+	}
+	
+	if (!fs.existsSync(ROOT + "/" + file)){
 		res.send(false)
 		return
 	}
 
-	fs.rm("/usr/src/app/uploads/"+file, () =>{
+	fs.rm(ROOT + "/" + file, () =>{
 		res.send(true)
 		return
 	})
@@ -293,7 +301,7 @@ service.get("/downloadFileFromSharedLink", (req, res) => {
 		return
 	}
 
-	res.download("/usr/src/app/uploads/"+file)
+	res.download(ROOT + "/" + file)
 })
 
 
