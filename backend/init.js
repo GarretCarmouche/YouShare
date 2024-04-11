@@ -269,12 +269,12 @@ service.get("/deleteFile", (req, res) => {
 		return;
 	}
 	
-	if (!fs.existsSync(ROOT + "/" + file)){
+	if (!fs.existsSync(filePath)){
 		res.send(false)
 		return
 	}
 
-	fs.rm(ROOT + "/" + file, () =>{
+	fs.rm(filePath, () =>{
 		res.send(true)
 		return
 	})
