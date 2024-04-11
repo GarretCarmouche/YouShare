@@ -255,14 +255,13 @@ service.get("/downloadFile", (req, res) => {
 service.get("/deleteFile", (req, res) => {
 	var user = req.query.USERNAME
 	var loginKey = req.query.LOGINKEY
-	var file = req.query.FILENAME
+	var filePath = fs.realpathSync(ROOT + "/" + req.query.FILENAME);
 
 	if(validateLoginKey(user, loginKey) == false){
 		res.send(false)
 		return
 	}
 
-	filePath = fs.realpathSync(ROOT + "/" + file);
 	if (!filePath.startsWith(ROOT)) {
 		res.statusCode = 403;
 		res.end();
