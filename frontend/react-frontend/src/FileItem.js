@@ -3,6 +3,7 @@ import FileDownload from "js-file-download"
 import React, { useState } from "react"
 
 import { GetApiUrl, GetLoginKey, GetUsername, UpdateFiles } from "./App"
+import escapeHTML from "escape-html"
 
 function FileItem(itemName){
 	const [itemShareLink, setShareLink] = useState("")
@@ -63,7 +64,7 @@ function FileItem(itemName){
 
 	return (
 		<div>
-			{itemName}
+			{escapeHTML(itemName)}
 			<button onClick = {downloadItem}>Download</button>
 			<button onClick = {shareItem}>Share</button>
 			<button onClick = {deleteItem}>Delete</button>
