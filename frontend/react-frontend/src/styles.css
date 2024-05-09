@@ -1,5 +1,5 @@
 .navBar{
-	background-color: #0f0f5a;
+	background-color: rgb(24, 120, 255);
 	height: 60px;
 	position: relative;
 }
@@ -10,4 +10,43 @@
 	margin: 20px;
 	text-decoration: none;
 	line-height: 60px;
+}
+
+.loginForm{
+	margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    width: 30%;
+    background-color: white;
+    border-radius: 25px;
+}
+
+.loginButton{
+	width: 50%;
+    margin-left: 25%;
+    margin-top: 2%;
+    margin-bottom: 5%;
+    border-radius: 20px;
+    background-color: rgb(24, 120, 255);
+    height: 40px;
+    font-size: 125%;
+}
+
+.loginField{
+	margin-top: 1%;
+    width: 65%;
+    margin-left: 20%;
+	height: 20px;
+}
+
+.loginLogo{
+	padding-top: 3%;
+	padding-bottom: 1.5%;
+	height: 120px;
+	text-align: center;
+}
+
+img{
+	max-width: 100%;
+	max-height: 100%;
 }
