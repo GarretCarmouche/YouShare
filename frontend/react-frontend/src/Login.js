@@ -2,6 +2,7 @@ import React from "react"
 import { useState } from "react"
 import { GetApiUrl, GetLoginKey, GetUsername, SetLoginKey, SetUsername, UpdateFiles } from './App'
 import axios from 'axios'
+import "./styles.css"
 
 function Login(){
 	const [username, serUsername] = useState("");
@@ -49,21 +50,37 @@ function Login(){
 	}
 	
 	return (
-		<form onSubmit={handleSubmit}>
-		<input
-			type="text"
-			placeholder="Username"
-			value={username}
-			onChange={(event) => serUsername(event.target.value)}
-		/>
-		<input
-			type="password"
-			placeholder="Password"
-			value={password}
-			onChange={(event) => setPassword(event.target.value)}
-		/>
-		<button type="submit">Login</button>
-		</form>
+		<div className = "loginForm">
+			<div className="loginLogo">
+				<img src={require("./assets/DesignerLogoOnly.png")}/>
+			</div>
+
+			<form onSubmit={handleSubmit}>
+				<div>
+					<input
+						className="loginField"
+						type="text"
+						placeholder="Username"
+						value={username}
+						onChange={(event) => serUsername(event.target.value)}
+					/>
+				</div>
+
+				<div>
+					<input
+						className="loginField"
+						type="password"
+						placeholder="Password"
+						value={password}
+						onChange={(event) => setPassword(event.target.value)}
+					/>
+				</div>
+				
+				<div>
+					<button type="submit" className = "loginButton">Login</button>
+				</div>
+			</form>
+		</div>
 	)
 }
 
