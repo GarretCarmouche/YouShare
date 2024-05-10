@@ -54,12 +54,13 @@
 
 .loginFailureText{
 	color:red;
-	font-size: 100%;
+	font-size: 110%;
 	padding-top: 1%;
-	padding-bottom: 9%;
+	padding-bottom: 1%;
 	text-align: center;
 	display: flex;
 	flex-direction: column;
+	min-height: 50px;
 }
 
 img{
