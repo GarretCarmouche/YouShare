@@ -7,6 +7,7 @@ import "./styles.css"
 function Login(){
 	const [username, serUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [failureText, setFailureText] = useState(" ");
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -35,6 +36,8 @@ function Login(){
 				}else{
 					window.location.href = "/home"
 				}
+			}else{
+				setFailureText("Incorrect username or password")
 			}
 		}).catch(function(error){
 			console.log(error)
@@ -78,6 +81,10 @@ function Login(){
 				
 				<div>
 					<button type="submit" className = "loginButton">Login</button>
+				</div>
+
+				<div>
+					<text className="loginFailureText">{failureText}</text>
 				</div>
 			</form>
 		</div>
