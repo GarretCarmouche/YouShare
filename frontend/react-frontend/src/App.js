@@ -2,7 +2,6 @@ import React from 'react'
 import Login from './Login'
 import Home from './Home'
 import FileUpload from './FileUpload'
-import FileList from './FileList'
 import axios from 'axios'
 import DownloadSharedItem from './DownloadSharedItem'
 import UploadFileFromLink from './UploadFileFromLink'
@@ -70,13 +69,10 @@ function App() {
       page = UpdateLogin()
       break
     case "/home":
-      page = Home()
+      page = Home(GetFiles())
       break
     case "/upload":
       page = FileUpload()
-      break
-    case "/files":
-      page = FileList(GetFiles())
       break
     case "/downloadFileFromLink":
       page = DownloadSharedItem()

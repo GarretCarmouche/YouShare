@@ -1,10 +1,14 @@
 import React, { useState } from "react"
 import axios from "axios"
 import { GetApiUrl, GetLoginKey, GetUsername } from "./App"
-import NavBar from "./NavBar"
+import FileTable from "./FileTable"
 
-function Home(){
+function Home(files){
+	console.log("Files")
+	console.log(files)
+
 	const [sharedUploadLink, setSharedLink] = useState("")
+	const [sharedLinkVisible, setSharedLinkVisible] = useState("hidden")
 
 	function GenerateUploadLink(){
 		axios.get(GetApiUrl()+"/createUploadLink", {
@@ -15,18 +19,30 @@ function Home(){
 		  }).then((response) => {
 			console.log("Axios link response")
 			console.log(response)
-			setSharedLink("Sharable link: " + response.data)
+			setSharedLink(response.data)
+			setSharedLinkVisible()
 		  })
-	}	
+	}
+
+	function NavigateToUpload(){
+		window.location.href = "/upload"
+	}
 
 	return (
 		<div>
-			<NavBar></NavBar>
-			<div></div>
-			<button onClick={GenerateUploadLink}>Generate upload link</button>
-			{sharedUploadLink}
+			<div>
+				<button className="homeButton" onClick={NavigateToUpload}>Upload File</button>
+				<button className="homeButton" onClick={GenerateUploadLink}>Client Upload</button>
+			</div>
+
+			<div>
+				<div className="sharedLinkText" style={{visibility: sharedLinkVisible}}>{sharedUploadLink}</div>
+			</div>
+
+			
+			<FileTable files={files}></FileTable>
 		</div>
-	)
+	)	
 }
 
 export default Home

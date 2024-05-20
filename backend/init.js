@@ -6,6 +6,8 @@ const cors = require("cors")
 const bcrypt = require("bcrypt")
 const rateLimit = require("express-rate-limit")
 const urls = require("./urls.json")
+const escapeHTML = require("escape-html")
+const { escape } = require("querystring")
 
 const ROOT = "/usr/src/app/uploads"
 
@@ -42,6 +44,7 @@ const fileUploadAppendix = crypto.randomUUID()
 var loginKeys = []
 var downloadKeys = []
 var uploadKeys = []
+var fileMetadata = {}
 
 function GetFrontendUrlForDisplay(){
 	if(frontendUrl == null){
@@ -206,10 +209,20 @@ service.get("/getFileList", (req, res) => {
 		return
 	}
 
-	fs.readdirSync(ROOT).forEach(file => {
-		console.log("File list item",file)
+	var returnData = []
+	fs.readdirSync(ROOT).forEach((file, index) => {
+		console.log("File list item",file, index)
+		var data = fileMetadata[file]
+		returnData[index] = {
+			FileName: escapeHTML(file),
+			Uploader: escapeHTML(data.FileUploader),
+			UploadDate: escapeHTML(data.UploadDate),
+			FileSize: escapeHTML(data.FileSize),
+			FileType: escapeHTML(data.FileType)
+		}
 	})
-	res.send(fs.readdirSync(ROOT))
+
+	res.send(JSON.stringify(returnData))
 })
 
 service.get("/requestFileUpload", (req, res) => {
@@ -233,10 +246,18 @@ service.get("/requestFileUpload", (req, res) => {
 		return
 	}
 
+	var fileName = req.query.FILENAME
+	var fileSize = req.query.FILESIZE
+	var fileType = req.query.FILETYPE
+	var fileUploader = req.query.FILEUPLOADER
+
+	//Add file metadata to memory
+	fileMetadata[fileName] = {FileSize: fileSize, FileType: fileType, FileUploader: fileUploader, UploadDate: ""+(new Date())}
 	res.send(fileUploadAppendix)
 })
 
 service.post("/uploadFile"+fileUploadAppendix, upload.single("file"), (req, res) => {
+	console.log(req.query)
 	res.send(true)
 })
 

@@ -53,40 +53,40 @@ function Login(){
 	}
 	
 	return (
-		<div className = "loginForm">
-			<div className="loginLogo">
-				<img src={require("./assets/DesignerLogoOnly.png")}/>
+		<div className = "loginBackground">
+			<div className = "loginForm">
+				<div className="loginLogo">
+					<img src={require("./assets/DesignerLogoOnly.png")}/>
+				</div>
+
+				<form onSubmit={handleSubmit}>
+					<div>
+						<input
+							className="loginField"
+							type="text"
+							placeholder="Username"
+							value={username}
+							onChange={(event) => serUsername(event.target.value)}
+						/>
+					</div>
+
+					<div>
+						<input
+							className="loginField"
+							type="password"
+							placeholder="Password"
+							value={password}
+							onChange={(event) => setPassword(event.target.value)}
+						/>
+					</div>
+					
+					<div>
+						<button type="submit" className = "loginButton">Login</button>
+					</div>
+
+					<div className="loginFailureText">{failureText}</div>
+				</form>
 			</div>
-
-			<form onSubmit={handleSubmit}>
-				<div>
-					<input
-						className="loginField"
-						type="text"
-						placeholder="Username"
-						value={username}
-						onChange={(event) => serUsername(event.target.value)}
-					/>
-				</div>
-
-				<div>
-					<input
-						className="loginField"
-						type="password"
-						placeholder="Password"
-						value={password}
-						onChange={(event) => setPassword(event.target.value)}
-					/>
-				</div>
-				
-				<div>
-					<button type="submit" className = "loginButton">Login</button>
-				</div>
-
-				<div>
-					<text className="loginFailureText">{failureText}</text>
-				</div>
-			</form>
 		</div>
 	)
 }
