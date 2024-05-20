@@ -1,8 +1,64 @@
-import React from "react"
+import React, { useState } from "react"
+import axios from "axios"
+import { GetApiUrl, GetLoginKey, GetUsername, UpdateFiles} from "./App"
+import FileDownload from "js-file-download"
 
 function FileTable(props){
 	const files = props.files
-	
+
+	const [itemShareLink, setShareLink] = useState("")
+
+	const deleteItem = (itemName) => {
+		console.log("Deleting", itemName)
+
+		axios.get(GetApiUrl()+"/deleteFile", {
+			params: {
+				USERNAME: GetUsername(),
+				LOGINKEY: GetLoginKey(),
+				FILENAME: itemName,
+			},
+		}).then((response) => {
+			console.log("Axios delete response")
+			console.log(response)
+			UpdateFiles()
+			window.location.reload()
+		})
+	}
+
+	const downloadItem = (itemName) => {
+		console.log("Downloading", itemName)
+
+		axios.get(GetApiUrl()+"/downloadFile", {
+			params: {
+				USERNAME: GetUsername(),
+				LOGINKEY: GetLoginKey(),
+				FILENAME: itemName,
+			},
+
+			responseType: "blob"
+		}).then((response) => {
+			console.log("Axios download response")
+			console.log(response)
+			FileDownload(response.data, itemName)
+		})
+	}
+
+	const shareItem = (itemName) => {
+		console.log("Sharing", itemName)
+
+		axios.get(GetApiUrl()+"/createDownloadLink", {
+			params: {
+				USERNAME: GetUsername(),
+				LOGINKEY: GetLoginKey(),
+				FILENAME: itemName,
+			}
+		}).then((response) => {
+			console.log("Axios link response")
+			console.log(response)
+			setShareLink("Sharable link: " + response.data)
+		})
+	}
+
 	if(files === null){
 		return (
 			<div>
@@ -53,9 +109,10 @@ function FileTable(props){
 								<td className="fileTableItem">{formattedSize}</td>
 								<td className="fileTableItem">{val.FileType}</td>
 								<td>
-									<button className="fileItemButton">Delete</button>
-									<button className="fileItemButton">Download</button>
-									<button className="fileItemButton">Share</button>
+									<button className="fileItemButton" onClick={() => deleteItem(val.FileName)}>Delete</button>
+									<button className="fileItemButton" onClick = {() => downloadItem(val.FileName)}>Download</button>
+									<button className="fileItemButton" onClick = {() => shareItem(val.FileName)}>Share</button>
+									{itemShareLink}
 								</td>
 							</tr>
 						)

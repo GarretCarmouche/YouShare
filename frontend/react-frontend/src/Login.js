@@ -84,9 +84,7 @@ function Login(){
 						<button type="submit" className = "loginButton">Login</button>
 					</div>
 
-					<div>
-						<text className="loginFailureText">{failureText}</text>
-					</div>
+					<div className="loginFailureText">{failureText}</div>
 				</form>
 			</div>
 		</div>
