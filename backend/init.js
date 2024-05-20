@@ -42,6 +42,7 @@ const fileUploadAppendix = crypto.randomUUID()
 var loginKeys = []
 var downloadKeys = []
 var uploadKeys = []
+var fileMetadata = {}
 
 function GetFrontendUrlForDisplay(){
 	if(frontendUrl == null){
@@ -209,7 +210,8 @@ service.get("/getFileList", (req, res) => {
 	var returnData = []
 	fs.readdirSync(ROOT).forEach((file, index) => {
 		console.log("File list item",file, index)
-		returnData[index] = {FileName: file, Uploader: "John", UploadDate: "01-01-2001", FileSize: "0", FileType: "PNG"}
+		var data = fileMetadata[file]
+		returnData[index] = {FileName: file, Uploader: data.FileUploader, UploadDate: data.UploadDate, FileSize: data.FileSize, FileType: data.FileType}
 	})
 
 	res.send(JSON.stringify(returnData))
@@ -236,10 +238,18 @@ service.get("/requestFileUpload", (req, res) => {
 		return
 	}
 
+	var fileName = req.query.FILENAME
+	var fileSize = req.query.FILESIZE
+	var fileType = req.query.FILETYPE
+	var fileUploader = req.query.FILEUPLOADER
+
+	//Add file metadata to memory
+	fileMetadata[fileName] = {FileSize: fileSize, FileType: fileType, FileUploader: fileUploader, UploadDate: ""+(new Date())}
 	res.send(fileUploadAppendix)
 })
 
 service.post("/uploadFile"+fileUploadAppendix, upload.single("file"), (req, res) => {
+	console.log(req.query)
 	res.send(true)
 })
 

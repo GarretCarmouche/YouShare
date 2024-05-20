@@ -30,8 +30,10 @@ function FileUpload(){
 		console.log("UPLOADING FILE")
 		console.log(fd)
 		console.log(file)
-		console.log(file.name)
-		console.log(file.data)
+		console.log("Name",file.name)
+		console.log("Data",file.data)
+		console.log("Size",file.size)
+		console.log("Type",file.type)
 		console.log(username)
 		console.log(loginKey)
 
@@ -52,6 +54,10 @@ function FileUpload(){
 				AUTH: "Login",
 				USERNAME: GetUsername(),
 				LOGINKEY: GetLoginKey(),
+				FILENAME: file.name,
+				FILESIZE: file.size,
+				FILETYPE: file.type,
+				FILEUPLOADER: username
 			}
 		}).then((response) => {
 			console.log("Axios request upload response")
