@@ -206,10 +206,13 @@ service.get("/getFileList", (req, res) => {
 		return
 	}
 
-	fs.readdirSync(ROOT).forEach(file => {
-		console.log("File list item",file)
+	var returnData = []
+	fs.readdirSync(ROOT).forEach((file, index) => {
+		console.log("File list item",file, index)
+		returnData[index] = {FileName: file, Uploader: "John", UploadDate: "01-01-2001", FileSize: "0", FileType: "PNG"}
 	})
-	res.send(fs.readdirSync(ROOT))
+
+	res.send(JSON.stringify(returnData))
 })
 
 service.get("/requestFileUpload", (req, res) => {

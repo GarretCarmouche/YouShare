@@ -70,7 +70,7 @@ function App() {
       page = UpdateLogin()
       break
     case "/home":
-      page = Home()
+      page = Home(GetFiles())
       break
     case "/upload":
       page = FileUpload()
