@@ -6,6 +6,8 @@ const cors = require("cors")
 const bcrypt = require("bcrypt")
 const rateLimit = require("express-rate-limit")
 const urls = require("./urls.json")
+const escapeHTML = require("escape-html")
+const { escape } = require("querystring")
 
 const ROOT = "/usr/src/app/uploads"
 
@@ -211,7 +213,13 @@ service.get("/getFileList", (req, res) => {
 	fs.readdirSync(ROOT).forEach((file, index) => {
 		console.log("File list item",file, index)
 		var data = fileMetadata[file]
-		returnData[index] = {FileName: file, Uploader: data.FileUploader, UploadDate: data.UploadDate, FileSize: data.FileSize, FileType: data.FileType}
+		returnData[index] = {
+			FileName: escapeHTML(file),
+			Uploader: escapeHTML(data.FileUploader),
+			UploadDate: escapeHTML(data.UploadDate),
+			FileSize: escapeHTML(data.FileSize),
+			FileType: escapeHTML(data.FileType)
+		}
 	})
 
 	res.send(JSON.stringify(returnData))
