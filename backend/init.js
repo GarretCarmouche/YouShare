@@ -211,8 +211,9 @@ service.get("/getFileList", (req, res) => {
 
 	var returnData = []
 	fs.readdirSync(ROOT).forEach((file, index) => {
-		console.log("File list item",file, index)
 		var data = fileMetadata[file]
+		console.log("File list item",file, index, data, fileMetadata)
+
 		returnData[index] = {
 			FileName: escapeHTML(file),
 			Uploader: escapeHTML(data.FileUploader),
@@ -246,12 +247,15 @@ service.get("/requestFileUpload", (req, res) => {
 		return
 	}
 
+	console.log("Creating metadata for file",req.query)
+	
 	var fileName = req.query.FILENAME
 	var fileSize = req.query.FILESIZE
 	var fileType = req.query.FILETYPE
 	var fileUploader = req.query.FILEUPLOADER
 
 	//Add file metadata to memory
+	
 	fileMetadata[fileName] = {FileSize: fileSize, FileType: fileType, FileUploader: fileUploader, UploadDate: ""+(new Date())}
 	res.send(fileUploadAppendix)
 })
