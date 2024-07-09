@@ -32,6 +32,33 @@ function GetLoginKey(){
   return sessionStorage.getItem("loginKey")
 }
 
+async function SetDomain(domain){
+  console.log("Set domain",domain)
+  axios.post(GetApiUrl()+"/setDomain", {}, {
+    params: {
+      USERNAME: GetUsername(),
+      LOGINKEY: GetLoginKey(),
+      DOMAIN: domain,
+    }
+  })
+}
+
+async function GetDomain(){
+  console.log("Get domain")
+  var domain
+  await axios.get(GetApiUrl()+"/getDomain", {
+    params: {
+      USERNAME: GetUsername(),
+      LOGINKEY: GetLoginKey()
+    }
+  }).then((response) => {
+    console.log("GetDomain response",response)
+    domain = response.data
+  })
+
+  return domain
+}
+
 async function UpdateFiles(){
   if (GetUsername() == null || GetLoginKey() == null){
     return
@@ -56,6 +83,8 @@ function GetFiles(){
   return filesList
 }
 
+var domain = await GetDomain()
+
 function App() {
   var page
   switch(window.location.pathname){
@@ -69,7 +98,7 @@ function App() {
       page = UpdateLogin()
       break
     case "/home":
-      page = Home(GetFiles())
+      page = Home(GetFiles(), domain)
       break
     case "/upload":
       page = FileUpload()
@@ -104,3 +133,5 @@ export {GetUsername}
 export {GetFiles}
 export {UpdateFiles}
 export {GetApiUrl}
+export {SetDomain}
+export {GetDomain}

@@ -38,13 +38,27 @@ service.use(limiter)
 const port = process.env.PORT || 2048
 const defaultUser = "admin"
 const defaultPass = "admin"
-const frontendUrl = urls.frontend
 const fileUploadAppendix = crypto.randomUUID()
 
+var frontendUrl = ""
 var loginKeys = []
 var downloadKeys = []
 var uploadKeys = []
 var fileMetadata = {}
+
+//Initialize url from db
+pool.query("CREATE TABLE IF NOT EXISTS url (url TEXT)").then(() => {
+	pool.query("SELECT * FROM url").then((data) => {
+		console.log("URLDAta", data.rows)
+		if(data.rowCount == 0){
+			console.log("Insert default domain")
+			pool.query("INSERT INTO url (url) VALUES ('yourdomain.home')")
+		}else{
+			frontendUrl = data.rows[0].url
+			console.log("Set url",frontendUrl)
+		}
+	})
+})
 
 function GetFrontendUrlForDisplay(){
 	if(frontendUrl == null){
@@ -357,6 +371,37 @@ service.get("/createUploadLink", (req, res) => {
 	var key = generateUploadKey()
 	var link = GetFrontendUrlForDisplay()+"/uploadFileFromLink?key="+key
 	res.send(link)
+})
+
+service.post("/setDomain",  (req, res) => {
+	var user = req.query.USERNAME
+	var loginKey = req.query.LOGINKEY
+	var domain = req.query.DOMAIN
+	console.log("Set domain", domain, req.query)
+
+	if(validateLoginKey(user, loginKey) == false){
+		res.send(false)
+		return
+	}
+
+	frontendUrl = domain
+
+	pool.query("UPDATE url SET url = $1", [domain])
+
+	res.send(true)
+})
+
+service.get("/getDomain", (req, res) => {
+	console.log("Get domain")
+	var user = req.query.USERNAME
+	var loginKey = req.query.LOGINKEY
+
+	if(validateLoginKey(user, loginKey) == false){
+		res.send(false)
+		return
+	}
+
+	res.send(GetFrontendUrlForDisplay())
 })
 
 checkDefaultUser()
