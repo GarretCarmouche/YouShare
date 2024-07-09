@@ -1,14 +1,14 @@
 import React, { useState } from "react"
 import axios from "axios"
-import { GetApiUrl, GetLoginKey, GetUsername } from "./App"
+import { GetApiUrl, GetLoginKey, GetUsername, SetDomain } from "./App"
 import FileTable from "./FileTable"
 
-function Home(files){
-	console.log("Files")
-	console.log(files)
+function Home(files, sourceDomain){
+	console.log("Files, domain",files, sourceDomain)
 
 	const [sharedUploadLink, setSharedLink] = useState("")
 	const [sharedLinkVisible, setSharedLinkVisible] = useState("hidden")
+	const [domain, setStateDomain] = useState(sourceDomain)	
 
 	function GenerateUploadLink(){
 		axios.get(GetApiUrl()+"/createUploadLink", {
@@ -28,6 +28,12 @@ function Home(files){
 		window.location.href = "/upload"
 	}
 
+	function UpdateDomain(){
+		console.log("Update domain", domain)
+		SetDomain(domain)
+		setStateDomain(domain)
+	}
+
 	return (
 		<div>
 			<div>
@@ -37,6 +43,17 @@ function Home(files){
 
 			<div>
 				<div className="sharedLinkText" style={{visibility: sharedLinkVisible}}>{sharedUploadLink}</div>
+			</div>
+
+			<div className="domainSection">
+				<>Your domain: </>
+				<input
+					className="domainField"
+					type="text"
+					value={domain}
+					onChange={(event) => setStateDomain(event.target.value)}
+				/>
+				<button className="domainButton" onClick={UpdateDomain}>Update</button>
 			</div>
 
 			

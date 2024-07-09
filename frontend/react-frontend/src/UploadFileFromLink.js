@@ -52,7 +52,11 @@ function UploadFileFromLink(){
 		axios.get(GetApiUrl()+"/requestFileUpload", {
 			params: {
 				AUTH: "SharedKey",
-				KEY: key
+				KEY: key,
+				FILENAME: file.name,
+				FILESIZE: file.size,
+				FILETYPE: file.type,
+				FILEUPLOADER: "Guest",
 			}
 		}).then((response) => {
 			console.log("Axios request upload response")

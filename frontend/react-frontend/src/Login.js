@@ -5,7 +5,7 @@ import axios from 'axios'
 import "./styles.css"
 
 function Login(){
-	const [username, serUsername] = useState("");
+	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [failureText, setFailureText] = useState(" ");
 
@@ -66,7 +66,7 @@ function Login(){
 							type="text"
 							placeholder="Username"
 							value={username}
-							onChange={(event) => serUsername(event.target.value)}
+							onChange={(event) => setUsername(event.target.value)}
 						/>
 					</div>
 
