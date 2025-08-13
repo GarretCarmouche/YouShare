@@ -9,7 +9,7 @@ const urls = require("./urls.json")
 const escapeHTML = require("escape-html")
 const { escape } = require("querystring")
 
-const ROOT = "/usr/src/app/uploads"
+const ROOT = "/uploads"
 
 if (!fs.existsSync(ROOT)){
 	fs.mkdirSync(ROOT)

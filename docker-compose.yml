@@ -24,6 +24,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
       POSTGRES_DB: authentication
+      FILE_UPLOAD_LOCATION: /uploads
+    volumes: 
+      - /mnt/c/uploads:/uploads
     ports:
       - 2048:2048
     depends_on:
