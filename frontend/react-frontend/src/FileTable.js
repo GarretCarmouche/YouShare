@@ -26,7 +26,8 @@ function FileTable(props){
 				</thead>
 				
 				<tbody>
-					{files.map((val, key) => {
+					{
+					files.map((val, key) => {
 						return (<FileListItem val={val} index={key}></FileListItem>)
 					})}
 				</tbody>

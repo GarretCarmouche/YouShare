@@ -5,6 +5,8 @@ import { GetApiUrl, GetLoginKey, GetUsername, UpdateFiles} from "./App"
 import FileDownload from "js-file-download"
 
 function FileListItem(props){
+	console.log("File list item props");
+	console.log(props);
 	var val = props.val
 	var key = props.index
 
@@ -20,8 +22,9 @@ function FileListItem(props){
 		}).then((response) => {
 			console.log("Axios delete response")
 			console.log(response)
-			UpdateFiles()
-			window.location.reload()
+			UpdateFiles().then(() => {
+				window.location.reload()
+			});
 		})
 	}
 

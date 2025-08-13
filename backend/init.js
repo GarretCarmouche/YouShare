@@ -8,6 +8,7 @@ const rateLimit = require("express-rate-limit")
 const urls = require("./urls.json")
 const escapeHTML = require("escape-html")
 const { escape } = require("querystring")
+const { Console } = require("console")
 
 const ROOT = "/uploads"
 
@@ -223,21 +224,36 @@ service.get("/getFileList", (req, res) => {
 		return
 	}
 
+	console.log("FILE METADATA");
+	
+	pool.query("CREATE TABLE IF NOT EXISTS Metadata " +
+			"(FileName TEXT, Uploader TEXT, UploadDate TEXT, FileSize TEXT, FileType TEXT)");
+
 	var returnData = []
-	fs.readdirSync(ROOT).forEach((file, index) => {
-		var data = fileMetadata[file]
-		console.log("File list item",file, index, data, fileMetadata)
-
-		returnData[index] = {
-			FileName: escapeHTML(file),
-			Uploader: escapeHTML(data.FileUploader),
-			UploadDate: escapeHTML(data.UploadDate),
-			FileSize: escapeHTML(data.FileSize),
-			FileType: escapeHTML(data.FileType)
-		}
-	})
-
-	res.send(JSON.stringify(returnData))
+	const promises = fs.readdirSync(ROOT).map(async (file) => {
+		await pool.query("SELECT FileName, Uploader, UploadDate, FileSize, FileType FROM Metadata " +
+			"WHERE FileName = $1", [file]
+			).then((data) => {
+				console.log(file + " metadata:");
+				console.log(data);
+				if(data.rowCount > 0){
+					var fileData = data.rows[0]
+					returnData[returnData.length] = {
+						FileName: escapeHTML(file),
+						Uploader: escapeHTML(fileData.uploader),
+						UploadDate: escapeHTML(fileData.uploaddate),
+						FileSize: escapeHTML(fileData.filesize),
+						FileType: escapeHTML(fileData.filetype)
+					}
+				}
+			})
+	});
+	
+	Promise.all(promises).then(() => {
+		console.log("Return data");
+		console.log(returnData);
+		res.send(JSON.stringify(returnData))
+	});
 })
 
 service.get("/requestFileUpload", (req, res) => {
@@ -270,7 +286,19 @@ service.get("/requestFileUpload", (req, res) => {
 
 	//Add file metadata to memory
 	
-	fileMetadata[fileName] = {FileSize: fileSize, FileType: fileType, FileUploader: fileUploader, UploadDate: ""+(new Date())}
+	console.log("Writing file metadata");
+
+	pool.query("CREATE TABLE IF NOT EXISTS Metadata " +
+			"(FileName TEXT, Uploader TEXT, UploadDate TEXT, FileSize TEXT, FileType TEXT)");
+
+	console.log("Created metadata table");
+
+	pool.query("INSERT INTO Metadata (FileName, Uploader, UploadDate, FileSize, FileType) " +
+		"VALUES ($1, $2, $3, $4, $5)", [fileName, fileUploader, ""+(new Date()), fileSize, fileType ]
+	);
+
+	console.log("Wrote file metadata");
+
 	res.send(fileUploadAppendix)
 })
 
@@ -301,6 +329,8 @@ service.get("/deleteFile", (req, res) => {
 		res.send(false)
 		return
 	}
+
+	pool.query("DELETE FROM Metadata WHERE FileName = $1", [req.query.FILENAME]);
 
 	if (!filePath.startsWith(ROOT)) {
 		res.statusCode = 403;
