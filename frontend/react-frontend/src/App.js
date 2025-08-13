@@ -64,7 +64,7 @@ async function UpdateFiles(){
     return
   }
 
-  axios.get(GetApiUrl()+"/getFileList", {
+  await axios.get(GetApiUrl()+"/getFileList", {
     params: {
       USERNAME: GetUsername(),
       LOGINKEY: GetLoginKey()
@@ -84,6 +84,7 @@ function GetFiles(){
 }
 
 var domain = await GetDomain()
+await UpdateFiles();
 
 function App() {
   var page
