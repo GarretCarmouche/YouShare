@@ -1,0 +1,55 @@
+services:
+  frontend:
+    restart: always
+    image: gcarmouche/youshare-frontend:latest
+    ports:
+      - 3000:3000
+  backend:
+    restart: always
+    image: gcarmouche/youshare-backend:latest
+    environment:
+      NODE_ENV: production
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: authentication
+      FILE_UPLOAD_LOCATION: /uploads
+    volumes: 
+      - /mnt/c/uploads:/uploads
+    ports:
+      - 2048:2048
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres
+    restart: always
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=authentication
+      - POSTGRES_PASSWORD=root
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  nginx:
+    restart: always
+    image: nginx:latest
+    ports:
+      - 3050:3050
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend
+      - frontend
+    links:
+      - backend
+      - db
+      - frontend
+volumes:
+  db-data:
