@@ -5,7 +5,6 @@ if(!fs.existsSync("./urls.json")){
 
 const express = require("express")
 const pool = require("./db")
-
 const multer = require("multer")
 const cors = require("cors")
 const bcrypt = require("bcrypt")
