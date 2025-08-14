@@ -11,7 +11,7 @@ services:
   frontend:
     restart: always
     build:
-      context: ./frontend/react-frontend
+      context: ./frontend/
     ports:
       - 3000:3000
   backend:

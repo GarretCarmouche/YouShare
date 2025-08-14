@@ -29,7 +29,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: gcarmouche/youshare
+          images: gcarmouche/youshare-frontend
           tags: latest
 
       - name: Build and push Docker image
@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
           context: .
-          file: ./Dockerfile
+          file: ./frontend/Dockerfile
           push: true
           tags:  ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -45,6 +45,6 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
-          subject-name: index.docker.io/gcarmouche/youshare
+          subject-name: index.docker.io/gcarmouche/youshare-frontend
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true

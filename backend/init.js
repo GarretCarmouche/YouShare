@@ -1,5 +1,5 @@
 const express = require("express")
-const pool = require("../db/db")
+const pool = require("./db")
 const fs = require("fs")
 const multer = require("multer")
 const cors = require("cors")
