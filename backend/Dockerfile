@@ -34,4 +34,4 @@ COPY . .
 EXPOSE 2048
 
 # Run the application.
-CMD node backend/init.js
+CMD node ./init.js
