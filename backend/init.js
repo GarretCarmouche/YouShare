@@ -329,7 +329,7 @@ service.get("/downloadFile", (req, res) => {
 		return;
 	}
 
-	res.download(ROOT + "/" + file)
+	res.download(filePath)
 })
 
 service.get("/deleteFile", (req, res) => {
@@ -382,7 +382,14 @@ service.get("/downloadFileFromSharedLink", (req, res) => {
 		return
 	}
 
-	res.download(ROOT + "/" + file)
+	filePath = fs.realpathSync(path.resolve(ROOT, file));
+	if (!filePath.startsWith(ROOT)) {
+		res.statusCode = 403;
+		res.end();
+		return;
+	}
+
+	res.download(filePath)
 })
 
 
