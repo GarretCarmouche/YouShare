@@ -3,6 +3,7 @@ import { useState } from "react"
 import { GetApiUrl, GetLoginKey, GetUsername, SetLoginKey, SetUsername, UpdateFiles } from './App'
 import axios from 'axios'
 import "./styles.css"
+import logo from './assets/DesignerLogoOnly.png'
 
 function Login(){
 	const [username, setUsername] = useState("");
@@ -56,7 +57,7 @@ function Login(){
 		<div className = "loginBackground">
 			<div className = "loginForm">
 				<div className="loginLogo">
-					<img src={require("./assets/DesignerLogoOnly.png")}/>
+					<img src={logo}/>
 				</div>
 
 				<form onSubmit={handleSubmit}>
