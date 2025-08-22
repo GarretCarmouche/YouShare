@@ -329,7 +329,7 @@ service.get("/downloadFile", (req, res) => {
 		return;
 	}
 
-	res.download(filePath)
+	res.write(fs.readFileSync(filePath, 'utf8'));
 })
 
 service.get("/deleteFile", (req, res) => {
@@ -389,7 +389,7 @@ service.get("/downloadFileFromSharedLink", (req, res) => {
 		return;
 	}
 
-	res.download(filePath)
+	res.write(fs.readFileSync(filePath, 'utf8'));
 })
 
 
