@@ -2,7 +2,7 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
-ARG NODE_VERSION=21.1.0
+ARG NODE_VERSION=22.18.0
 
 FROM node:${NODE_VERSION}-alpine
 
@@ -20,7 +20,7 @@ COPY ["package.json", "package-lock.json", "./"]
 # into this layer.
 RUN npm install
 
-RUN mkdir -p node_modules/.cache && chmod -R 777 node_modules/.cache
+RUN mkdir -p node_modules/.cache && chmod -R 777 node_modules
 
 # Run the application as a non-root user.
 USER node
