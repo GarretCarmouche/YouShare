@@ -44,6 +44,7 @@ const port = process.env.PORT || 2048
 const defaultUser = "admin"
 const defaultPass = "admin"
 const fileUploadAppendix = crypto.randomUUID()
+const encryptionKey = process.env.ENCRYPTION_KEY
 
 var frontendUrl = ""
 var loginKeys = []
@@ -184,6 +185,21 @@ function generateLoginKey(user){
 	return uid
 }
 
+function encryptFile(filePath, key) {
+  // Read the contents of the file
+  const data = fs.readFileSync(filePath);
+
+  // Create a cipher object
+  const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), crypto.randomBytes(16));
+
+  // Encrypt the data
+  let encryptedData = cipher.update(data, 'utf8', 'hex');
+  encryptedData += cipher.final('hex');
+
+  // Write the encrypted data back to the file
+  fs.writeFileSync(filePath, encryptedData);
+}
+
 service.get("/updateLoginInfo", (req, res) => {
 	res.header("Access-Control-Allow-Origin", "*")
 	var oldUser = req.query.OLDUSERNAME
@@ -307,7 +323,12 @@ service.get("/requestFileUpload", (req, res) => {
 })
 
 service.post("/uploadFile"+fileUploadAppendix, upload.single("file"), (req, res) => {
-	console.log(req.query)
+	console.log(req.query);
+	console.log(req.file.filename);
+
+	const filePath = path.join(ROOT, req.file.filename);
+	encryptFile(filePath);
+
 	res.send(true)
 })
 

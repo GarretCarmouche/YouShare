@@ -25,6 +25,7 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: authentication
       FILE_UPLOAD_LOCATION: /uploads
+      ENCRYPTION_KEY: daiuh32782weno78h3eda
     volumes: 
       - /mnt/c/uploads:/uploads
     ports:
