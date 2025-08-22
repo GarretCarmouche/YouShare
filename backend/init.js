@@ -13,6 +13,7 @@ const urls = require("./urls.json")
 const escapeHTML = require("escape-html")
 const { escape } = require("querystring")
 const { Console } = require("console")
+const path = require("path")
 
 const ROOT = "/uploads"
 
@@ -321,7 +322,7 @@ service.get("/downloadFile", (req, res) => {
 		return
 	}
 
-	filePath = fs.realpathSync(path.resolve(ROOT, filePath));
+	filePath = fs.realpathSync(path.resolve(ROOT, file));
 	if (!filePath.startsWith(ROOT)) {
 		res.statusCode = 403;
 		res.end();
