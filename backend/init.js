@@ -321,6 +321,13 @@ service.get("/downloadFile", (req, res) => {
 		return
 	}
 
+	filePath = fs.realpathSync(path.resolve(ROOT, filePath));
+	if (!filePath.startsWith(ROOT)) {
+		res.statusCode = 403;
+		res.end();
+		return;
+	}
+
 	res.download(ROOT + "/" + file)
 })
 
