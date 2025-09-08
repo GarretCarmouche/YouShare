@@ -9,7 +9,6 @@ updates:
     directories:
       - "/frontend"
       - "/backend"
-    directory: "/backend" # Location of package manifests
     schedule:
       interval: "daily"
     cooldown:
