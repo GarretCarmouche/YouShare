@@ -19,12 +19,22 @@ function GetUsername(){
 }
 
 function SetUsername(user){
-  sessionStorage.setItem("username", user)
+  if(user === null){
+    sessionStorage.removeItem("username");
+  }else{
+    sessionStorage.setItem("username", user)
+  }
+  
   console.log("SET USERNAME",user)
 }
 
 function SetLoginKey(key){
-  sessionStorage.setItem("loginKey", key)
+  if(key === null){
+    sessionStorage.removeItem("loginkey");
+  }else{
+    sessionStorage.setItem("loginKey", key);
+  }
+  
   console.log("SET LOGIN KEY",key)
 }
 
