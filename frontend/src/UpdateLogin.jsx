@@ -1,7 +1,7 @@
 import React from "react"
 import { useState } from "react"
 import axios from 'axios'
-import { GetApiUrl } from "./App";
+import { GetApiUrl, SetLoginKey, SetUsername } from "./App";
 
 function UpdateLogin(){
 	const [oldUsername, setOldUsername] = useState("");
@@ -22,6 +22,8 @@ function UpdateLogin(){
 		}).then(function(success){
 			console.log(success)
 			if(success.data){
+				SetUsername(null);
+				SetLoginKey(null);
 				window.location.href = "/login"
 			}
 		}).catch(function(error){
