@@ -31,8 +31,8 @@ const storage = multer.diskStorage({
 })
 
 const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 minutes
-	limit: 100, // limit each IP to 100 requests per windowMs
+	windowMs: 10 * 60 * 1000, // 15 minutes
+	limit: 200, // limit each IP to 100 requests per windowMs
 })
 
 const upload = multer({storage})
